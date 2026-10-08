@@ -1,0 +1,30 @@
+PROGRAM Bai2Test; // Kiem thu toan bo tinh nang mo rong cua Bai 2
+
+VAR
+  s : STRING;      // 1. Kieu du lieu STRING
+  b : BYTES;       // 4. Kieu du lieu BYTES
+  x : INTEGER;
+  y : INTEGER;
+  res : INTEGER;
+
+BEGIN
+  // 1. Hang xau ky tu STRING
+  s := "Hello, Compiler Lab!";
+  
+  x := 10;
+  y := 3;
+
+  // 2. Toan tu chia du %
+  res := x % y;
+
+  // 5. Toan tu luy thua ** va phan biet voi *
+  res := 2 ** 10;
+  res := 2 * 10;
+
+  // 6. Cau truc lap REPEAT ... UNTIL
+  REPEAT
+    x := x - 1;
+    res := res * 2
+  UNTIL x = 0;
+
+END. (* Ket thuc chuong trinh *)
