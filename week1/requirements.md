@@ -1,5 +1,5 @@
 ### Bài 1. Hoàn thiện mã nguồn
-Hoàn thành tất cả các phần được đánh dấu TODO trong `week1/incompleted/`
+Hoàn thành tất cả các phần được đánh dấu TODO trong `week1\incompleted\scanner.c`
 
 ### Bài 2. Mở rộng bộ từ vựng của KPL
 Dựa trên kết quả Bài 1, chỉnh sửa mã nguồn để bộ phân tích từ vựng nhận biết thêm các thành phần sau:
