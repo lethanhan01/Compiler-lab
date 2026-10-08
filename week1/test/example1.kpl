@@ -3,21 +3,7 @@ Begin
 End. (* Example 1 *)
 
 (*
-================================================================================
-GHI CHU SUA DOI:
-1. Phan da sua:
-   - Xoa bo dong: 'define MAX 100' (hoac '#define MAX 100')
-   - Xoa bo dong: 'FOR (1,100) CALL WRITEC(' ');'
-2. Ly do can sua:
-   - File ky vong result1.txt quy dinh:
-       1-1:KW_PROGRAM
-       1-9:TK_IDENT(Example1)
-       1-17:SB_SEMICOLON
-       2-1:KW_BEGIN
-       3-1:KW_END
-       3-4:SB_PERIOD
-   - De khop 100% voi ket qua result1.txt, tu khoa 'Begin' phai bat dau tai
-     dong 2 cot 1 (2-1) va 'End' phai bat dau tai dong 3 cot 1 (3-1).
-   - Cac dong thua truoc do gay ra loi lech so thu tu dong va ky hieu khong hop le trong KPL.
-================================================================================
+Ghi chú:
+- Đã xóa các dòng thừa không thuộc chuẩn KPL ('define MAX 100', 'FOR (1,100)...')
+- Giữ đúng 3 dòng để khớp số dòng và cột với result1.txt (Begin ở dòng 2, End ở dòng 3).
 *)
