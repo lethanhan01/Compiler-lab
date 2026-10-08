@@ -21,6 +21,7 @@ extern CharCode charCodes[];
 
 /***************************************************************/
 /* 
+Ở đây em bổ sung điều kiện currentChar != EOF bởi vì:
 Khi đọc đến cuối file sẽ gặp khoảng trắng/xuống dòng cuối, readChar() đọc EOF (-1). 
 Biểu thức charCodes[-1] truy cập bộ nhớ ngoài mảng nhận giá trị 0 (CHAR_SPACE)
 làm vòng lặp vô hạn và chương trình bị treo 
@@ -50,6 +51,10 @@ void skipComment() {
   if (state != 2)
     error(ERR_ENDOFCOMMENT, lineNo, colNo);
 }
+/*
+AI (Gemini): Cài đặt hàm skipComment bỏ qua chú thích trong KPL
+*/
+
 
 Token* readIdentKeyword(void) {
   // TODO
@@ -74,6 +79,9 @@ Token* readIdentKeyword(void) {
 
   return token;
 }
+/*
+AI (Gemini): Viết hàm readIdentKeyword đọc định danh/từ khóa KPL cho tôi
+*/
 
 Token* readNumber(void) {
   // TODO
@@ -88,6 +96,9 @@ Token* readNumber(void) {
   token->value = atoi(token->string);
   return token;
 }
+/*
+AI (Gemini): Cài đặt hàm readNumber giúp tôi đọc hằng số số trong KPL
+*/
 
 Token* readConstChar(void) {
   // TODO
@@ -119,6 +130,9 @@ Token* readConstChar(void) {
     return token;
   }
 }
+/*
+AI (Gemini): Cài đặt hàm readConstChar giúp tôi đọc hằng số ký tự trong KPL
+*/
 
 void skipSingleComment(void) {
   while ((currentChar != EOF) && (currentChar != '\n'))
@@ -157,6 +171,19 @@ Token* readConstString(void) {
   return token;
 }
 
+/*
+/*
+Bài 2
+Gemini:
+Dựa trên kết quả Bài 1, chỉnh sửa mã nguồn để bộ phân tích từ vựng nhận biết thêm các thành phần sau:
+1.	Kiểu dữ liệu string: thêm từ khóa STRING và hằng xâu ký tự.
+2.	Phép toán lấy phần dư: thêm toán tử %.
+3.	Comment một dòng: chuỗi // bắt đầu một comment kéo dài đến hết dòng, giống C++.
+4.	Kiểu dữ liệu bytes: thêm từ khóa BYTES.
+5.	Phép toán lũy thừa **: ví dụ như 2**10 biểu diễn 210. Lưu ý: cần phân biệt ** với toán tử nhân *.
+6.	Cấu trúc lặp REPEAT … UNTIL: thêm hai từ khóa REPEAT và UNTIL cho câu lệnh có dạng:
+REPEAT <statement> UNTIL <condition>;
+*/
 
 Token* getToken(void) {
   Token *token;

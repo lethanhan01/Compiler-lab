@@ -1,6 +1,7 @@
 CFLAGS = -c -Wall
 CC = gcc
 LIBS =  -lm 
+ZIP_NAME ?= LeThanhAn_20235631.zip
 
 all: scanner
 
@@ -23,5 +24,10 @@ error.o: error.c
 	${CC} ${CFLAGS} error.c
 
 clean:
-	rm -f *.o *~
+	rm -f *.o *~ scanner scanner.exe $(ZIP_NAME) *.zip
+
+zip: clean
+	zip $(ZIP_NAME) *.c *.h Makefile
+
+.PHONY: all clean zip
 
