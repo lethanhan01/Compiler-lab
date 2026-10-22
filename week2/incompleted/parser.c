@@ -183,6 +183,9 @@ void compileUnsignedConstant(void) {
   case TK_CHAR:
     eat(TK_CHAR);
     break;
+  case TK_STRING:
+    eat(TK_STRING);
+    break;
   default:
     error(ERR_INVALIDCONSTANT, lookAhead->lineNo, lookAhead->colNo);
     break;
@@ -202,6 +205,9 @@ void compileConstant(void) {
     break;
   case TK_CHAR:
     eat(TK_CHAR);
+    break;
+  case TK_STRING:
+    eat(TK_STRING);
     break;
   default:
     compileConstant2();
@@ -229,6 +235,7 @@ void compileType(void) {
   switch (lookAhead->tokenType) {
   case KW_INTEGER:
   case KW_CHAR:
+  case KW_STRING:
     compileBasicType();
     break;
   case TK_IDENT:
@@ -256,6 +263,9 @@ void compileBasicType(void) {
     break;
   case KW_CHAR:
     eat(KW_CHAR);
+    break;
+  case KW_STRING:
+    eat(KW_STRING);
     break;
   default:
     error(ERR_INVALIDBASICTYPE, lookAhead->lineNo, lookAhead->colNo);
@@ -341,6 +351,9 @@ void compileStatement(void) {
   case KW_FOR:
     compileForSt();
     break;
+  case KW_DO:
+    compileDoWhileSt();
+    break;
     // EmptySt needs to check FOLLOW tokens
   case SB_SEMICOLON:
   case KW_END:
@@ -405,6 +418,15 @@ void compileWhileSt(void) {
   eat(KW_DO);
   compileStatement();
   assert("While statement parsed ....");
+}
+
+void compileDoWhileSt(void) {
+  assert("Parsing a do-while statement ....");
+  eat(KW_DO);
+  compileStatement();
+  eat(KW_WHILE);
+  compileCondition();
+  assert("Do-while statement parsed ....");
 }
 
 void compileForSt(void) {
@@ -542,6 +564,11 @@ void compileTerm2(void) {
     compileFactor();
     compileTerm2();
     break;
+  case SB_MOD:
+    eat(SB_MOD);
+    compileFactor();
+    compileTerm2();
+    break;
   default:
     break;
   }
@@ -552,6 +579,7 @@ void compileFactor(void) {
   switch (lookAhead->tokenType) {
   case TK_NUMBER:
   case TK_CHAR:
+  case TK_STRING:
     compileUnsignedConstant();
     break;
   case TK_IDENT:

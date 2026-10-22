@@ -197,6 +197,88 @@ diff -u <(./parser ../test/example1.kpl) ../test/result1.txt
 
 ---
 
+### Bài tập 4: Bài tập bổ sung (Mở rộng Parser)
+
+**Mục tiêu**: Mở rộng hệ thống từ vựng (Scanner/Token) và cú pháp (Parser) của ngôn ngữ KPL để hỗ trợ kiểu dữ liệu chuỗi ký tự (`STRING`), toán tử chia lấy dư (`%`) và cấu trúc lặp kiểm tra điều kiện sau (`DO ... WHILE`).
+
+#### 1. Các tệp cần chỉnh sửa:
+- `week2/incompleted/token.h` & `token.c`:
+  - Khai báo token loại mới `TK_STRING` (hằng chuỗi), từ khóa `KW_STRING`, toán tử `SB_MOD` (phép chia lấy dư `%`).
+  - Thêm từ khóa `"STRING"` vào mảng `keywords` và cập nhật hằng số `KEYWORDS_COUNT`.
+  - Cập nhật hàm `tokenToString()` tương ứng để in tên token ra màn hình.
+- `week2/incompleted/scanner.c`:
+  - Cập nhật hàm `getToken()` để nhận dạng ký tự `'%'` trả về `SB_MOD`.
+  - Thêm logic đọc chuỗi ký tự (trong cặp dấu nháy kép `"` hoặc nháy đơn `'`) trả về token `TK_STRING`.
+- `week2/incompleted/parser.h` & `parser.c`:
+  - Khai báo prototype `void compileDoWhileSt(void);` trong `parser.h`.
+  - Cài đặt các luật mở rộng ngữ pháp trong `parser.c`.
+
+#### 2. Checklist chi tiết và Quy tắc cú pháp mở rộng (BNF):
+
+- [x] **Mở rộng Kiểu dữ liệu và Hằng chuỗi (`String`):**
+  - **Quy tắc BNF mở rộng:**
+    $$\text{BasicType} \to \texttt{INTEGER} \mid \texttt{CHAR} \mid \texttt{STRING}$$
+    $$\text{UnsignedConstant} \to \text{Number} \mid \text{ConstIdent} \mid \text{ConstChar} \mid \text{TK\_STRING}$$
+    $$\text{Factor} \to \dots \mid \text{TK\_STRING}$$
+  - **Cần làm trong `parser.c`:**
+    - `compileBasicType()`: Thêm trường hợp `case KW_STRING: eat(KW_STRING); break;`.
+    - `compileUnsignedConstant()`: Thêm trường hợp `case TK_STRING: eat(TK_STRING); break;`.
+    - `compileFactor()`: Thêm trường hợp `case TK_STRING: compileUnsignedConstant(); break;`.
+
+- [x] **Mở rộng Phép toán lấy phần dư (`%` - Modulo):**
+  - **Quy tắc BNF mở rộng:**
+    $$\text{Term2} \to (\texttt{*} \mid \texttt{/} \mid \texttt{\%})\ \text{Factor}\ \text{Term2} \mid \varepsilon$$
+  - **Cần làm trong `parser.c`:**
+    - `compileTerm2()`: Bổ sung nhánh `case SB_MOD: eat(SB_MOD); compileFactor(); compileTerm2(); break;` (cùng mức ưu tiên với phép nhân `*` và chia `/`).
+
+- [x] **Mở rộng Cấu trúc lặp `DO ... WHILE`:**
+  - **Quy tắc BNF mở rộng:**
+    $$\text{Statement} \to \dots \mid \text{DoWhileSt}$$
+    $$\text{DoWhileSt} \to \texttt{DO}\ \text{Statement}\ \texttt{WHILE}\ \text{Condition}$$
+  - **Cần làm trong `parser.c`:**
+    - `compileStatement()`: Bổ sung nhánh `case KW_DO: compileDoWhileSt(); break;`.
+    - Hiện thực hàm `compileDoWhileSt()`:
+      ```c
+      void compileDoWhileSt(void) {
+        assert("Parsing a do-while statement ....");
+        eat(KW_DO);
+        compileStatement();
+        eat(KW_WHILE);
+        compileCondition();
+        assert("Do-while statement parsed ....");
+      }
+      ```
+
+#### 3. Mã nguồn KPL kiểm thử mẫu (`test/bonus.kpl`):
+
+```pascal
+Program BonusTest;
+Const msg = "Hello KPL";
+Var s : String;
+    x : Integer;
+    r : Integer;
+
+Begin
+  s := "Compiler Construction";
+  x := 10;
+  r := x % 3;
+  Do
+    Begin
+      x := x - 1;
+      r := r + 1;
+    End
+  While x > 0;
+End.
+```
+
+#### 4. Lệnh biên dịch và kiểm thử:
+
+```bash
+cd week2/incompleted
+make clean && make
+./parser ../test/bonus.kpl
+```
+
 ## 4. Lưu ý khi cài đặt
 
 1. **Khái niệm `lookAhead`**: Biến toàn cục `lookAhead` luôn chứa token tiếp theo cần kiểm tra.
@@ -350,4 +432,3 @@ Hệ thống luật văn phạm KPL đã được loại bỏ đệ quy trái v�
 92) Indexes             ::= SB_LSEL Expression SB_RSEL Indexes
 93) Indexes             ::= ε
 ```
-
