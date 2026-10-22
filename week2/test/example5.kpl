@@ -1,7 +1,7 @@
 Program Example5; (* Factorial *)
    
 Var n : Integer;
-    i  : char;
+    i char; (* EDIT: Bo dau ':' de kiem thu loi cu phap Missing ':' khop voi result5.txt *)
 
 Function F(n : Integer) : Integer;
   Begin
