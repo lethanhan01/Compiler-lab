@@ -1,1 +1,6 @@
-{}
+{
+  "sonarlint.connectedMode.project": {
+    "connectionId": "lethanhan01",
+    "projectKey": "lethanhan01_Compiler-lab"
+  }
+}
